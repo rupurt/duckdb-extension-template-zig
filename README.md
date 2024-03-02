@@ -99,6 +99,12 @@ the DuckDB extension hooks defined in `root.zig`.
 the format `libmyextension.[so|dylib|dll]`. Add a custom install step to use the DuckDB naming convention
 for the [extension filename](https://github.com/rupurt/duckdb-extension-template-zig/blob/main/build.zig#L29).
 
+## Limitations
+
+Currently this template can only build extensions that don't rely on [third_party](https://github.com/duckdb/duckdb/tree/main/third_party)
+libraries included in the DuckDB repository. I have opened a [Github issue](https://github.com/NixOS/nixpkgs/issues/292855) to include
+those libraries in the `nixpkgs` derivation.
+
 ## Development
 
 This repository assumes you have Nix [installed](https://determinate.systems/posts/determinate-nix-installer)
