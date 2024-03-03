@@ -38,10 +38,19 @@ void duckdb::QuackExtension::Load(duckdb::DuckDB &db) {
 std::string duckdb::QuackExtension::Name() { return "quack"; }
 } // namespace duckdb
 
+//
+// We will call these extern functions via the C ABI from Zig.
+//
+
+// DuckDB requires the version returned from the extension to match the version
+// calling it. Here we use the linked version reported by `libduckdb`.
 extern "C" char const *extension_version(void) {
   return duckdb::DuckDB::LibraryVersion();
 }
 
+// This function is responsible for bootstrapping the extension into the DuckDB
+// internals. The `quack` extension is trivial and only registers a single scalar
+// function.
 extern "C" void extension_init(duckdb::DatabaseInstance &db) {
   duckdb::DuckDB db_wrapper(db);
   db_wrapper.LoadExtension<duckdb::QuackExtension>();

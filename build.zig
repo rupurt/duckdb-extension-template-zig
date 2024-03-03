@@ -13,16 +13,20 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
     });
+    // Allow Zig to find and parse the bridge C ABI
     lib.addIncludePath(.{ .path = "src/include" });
+    // Allow Zig to compile the C++ bridge
     lib.addCSourceFiles(.{
         .files = &.{
             "src/bridge.cpp",
         },
     });
+    // We can link against libc & libc++ provided in the  Nix build environment
     lib.linkLibC();
-    // We can link to libc++ within a Nix build environment
+    // Footguns for Zig linking against libcxx
     // https://github.com/ziglang/zig/blob/e1ca6946bee3acf9cbdf6e5ea30fa2d55304365d/build.zig#L369
     lib.linkSystemLibrary("c++");
+    // Link against the version of libduckdb built by the Nix derivation
     lib.linkSystemLibrary("duckdb");
 
     // Use the DuckDB filename convention `myextension.duckdb_extension`
