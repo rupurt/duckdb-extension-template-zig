@@ -8,20 +8,17 @@
 #include <duckdb/parser/parsed_data/create_scalar_function_info.hpp>
 
 namespace duckdb {
-inline void QuackScalarFun(DataChunk &args, ExpressionState &state,
-                           Vector &result) {
+inline void QuackScalarFun(DataChunk &args, ExpressionState &state, Vector &result) {
   auto &name_vector = args.data[0];
-  UnaryExecutor::Execute<string_t, string_t>(
-      name_vector, result, args.size(), [&](string_t name) {
-        return StringVector::AddString(result,
-                                       "Quack " + name.GetString() + " 🐥");
-      });
+  UnaryExecutor::Execute<string_t, string_t>(name_vector, result, args.size(), [&](string_t name) {
+    return StringVector::AddString(result, "Quack " + name.GetString() + " 🐥");
+  });
 }
 
 static void LoadInternal(DatabaseInstance &instance) {
   // Register a scalar function
-  auto quack_scalar_function = ScalarFunction(
-      "quack", {LogicalType::VARCHAR}, LogicalType::VARCHAR, QuackScalarFun);
+  auto quack_scalar_function =
+      ScalarFunction("quack", {LogicalType::VARCHAR}, LogicalType::VARCHAR, QuackScalarFun);
   ExtensionUtil::RegisterFunction(instance, quack_scalar_function);
 }
 
@@ -31,9 +28,7 @@ public:
   std::string Name() override;
 };
 
-void duckdb::QuackExtension::Load(duckdb::DuckDB &db) {
-  LoadInternal(*db.instance);
-}
+void duckdb::QuackExtension::Load(duckdb::DuckDB &db) { LoadInternal(*db.instance); }
 
 std::string duckdb::QuackExtension::Name() { return "quack"; }
 } // namespace duckdb
@@ -44,9 +39,7 @@ std::string duckdb::QuackExtension::Name() { return "quack"; }
 
 // DuckDB requires the version returned from the extension to match the version
 // calling it. Here we use the linked version reported by `libduckdb`.
-extern "C" char const *extension_version(void) {
-  return duckdb::DuckDB::LibraryVersion();
-}
+extern "C" char const *extension_version(void) { return duckdb::DuckDB::LibraryVersion(); }
 
 // This function is responsible for bootstrapping the extension into the DuckDB
 // internals. The `quack` extension is trivial and only registers a single scalar

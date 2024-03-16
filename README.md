@@ -57,13 +57,13 @@ provides a self contained Linux & MacOS development toolchain:
 
 - Clang (16.0.6)
 - libcxx headers (16.0.6)
-- Zig `master` (0.12.0-dev.3124+9e402704e)
+- Zig `master` (0.12.0-dev.3247+26e895e3d)
 - Multiple `duckdb` CLI & `libduckdb` versions linked to the same versions of `libc` & `libcxx` as the Zig compiler (v0.10.0, v0.9.2 & main)
 
 ```shell
 > mkdir myextension && cd myextension
 > nix flake init -t github:rupurt/duckdb-extension-template-zig#multi
-> nix develop .#v0-9-2 -c $SHELL
+> nix develop -c $SHELL
 ```
 
 ### 2. Implement 2 extension loader functions
@@ -101,18 +101,22 @@ for the [extension filename](https://github.com/rupurt/duckdb-extension-template
 
 ## Limitations
 
-Currently this template can only build extensions that don't rely on [third_party](https://github.com/duckdb/duckdb/tree/main/third_party)
-libraries included in the DuckDB repository. I have opened a [Github issue](https://github.com/NixOS/nixpkgs/issues/292855) to include
-those libraries in the `nixpkgs` derivation.
+Currently this template can only build extensions using versions of `duckdb` provided by the [duckdb-nix](https://github.com/rupurt/duckdb-nix)
+flake. The derivation built by the flake includes header files for `duckdb` [third_party](https://github.com/duckdb/duckdb/tree/main/third_party)
+dependencies.
+
+I have opened a [Github issue](https://github.com/NixOS/nixpkgs/issues/292855) to include those libraries
+in the `nixpkgs` derivation.
 
 ## Development
 
 This repository assumes you have Nix [installed](https://determinate.systems/posts/determinate-nix-installer)
 
 ```shell
-> nix develop .#main -c $SHELL
-> nix develop .#v0-9-2 -c $SHELL
+> nix develop -c $SHELL
 > nix develop .#v0-10-0 -c $SHELL
+> nix develop .#v0-9-2 -c $SHELL
+> nix develop .#main -c $SHELL
 ```
 
 ```shell

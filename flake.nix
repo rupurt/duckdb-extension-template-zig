@@ -69,6 +69,8 @@
               pkgs.duckdb-pkgs.main
             ]
             ++ devShellPackages;
+
+          DUCKDB_THIRD_PARTY_PATH = "${pkgs.duckdb-pkgs.main}/third_party";
         };
 
         # nix develop .#v0-10-0 -c $SHELL
@@ -79,9 +81,11 @@
 
           packages =
             [
-              pkgs.duckdb-pkgs.duckdb-v0_10_0
+              pkgs.duckdb-pkgs.v0_10_0
             ]
             ++ devShellPackages;
+
+          DUCKDB_THIRD_PARTY_PATH = "${pkgs.duckdb-pkgs.v0_10_0}/third_party";
         };
 
         # nix develop .#v0-9-2 -c $SHELL
@@ -92,13 +96,15 @@
 
           packages =
             [
-              pkgs.duckdb-pkgs.duckdb-v0_9_2
+              pkgs.duckdb-pkgs.v0_9_2
             ]
             ++ devShellPackages;
+
+          DUCKDB_THIRD_PARTY_PATH = "${pkgs.duckdb-pkgs.v0_9_2}/third_party";
         };
 
         # nix develop -c $SHELL
-        default = v0-9-2;
+        default = v0-10-0;
       };
     });
   in
